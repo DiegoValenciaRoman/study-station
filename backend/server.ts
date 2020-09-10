@@ -1,4 +1,6 @@
-import express = require('express');
+import express from "express";
+import bodyParser from "body-parser";
+
 import routes from './routes/index-routes';
 
 
@@ -11,8 +13,10 @@ export default class Server{
     this.app = express();
     this.port = port;
 
+    this.app.use(bodyParser.urlencoded({ extended: false }));
+    this.app.use(bodyParser.json());
     this.app.use('/api', routes );
-
+    
   }
 
   static init(port: number){
