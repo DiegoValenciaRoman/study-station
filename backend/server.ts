@@ -1,9 +1,21 @@
-import express = require("express");
-// Create a new express app instance
-const app: express.Application = express();
-app.get("/", function (req, res) {
-  res.send("Hello World!");
-});
-app.listen(3000, function () {
-  console.log("App is listening on port 3000!");
-});
+import express = require('express');
+
+export default class Server{
+
+  public app: express.Application;
+  public port: number;
+
+  constructor(port: number){
+    this.app = express();
+    this.port = port;
+  }
+
+  static init(port: number){
+    return new Server(port);
+  }
+
+  start(callback: ()=>void){
+    this.app.listen(this.port, callback);
+  }
+
+}
