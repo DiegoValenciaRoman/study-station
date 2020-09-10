@@ -1,4 +1,6 @@
 import express = require('express');
+import routes from './routes/index-routes';
+
 
 export default class Server{
 
@@ -8,6 +10,9 @@ export default class Server{
   constructor(port: number){
     this.app = express();
     this.port = port;
+
+    this.app.use('/api', routes );
+
   }
 
   static init(port: number){
