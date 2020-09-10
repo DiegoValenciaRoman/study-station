@@ -1,13 +1,13 @@
 import express from "express";
 import bodyParser from "body-parser";
 
+import cors from "cors";
 import routes from './routes/index-routes';
-
 
 export default class Server{
 
-  public app: express.Application;
-  public port: number;
+  private app: express.Application;
+  private port: number;
 
   constructor(port: number){
     this.app = express();
@@ -15,6 +15,7 @@ export default class Server{
 
     this.app.use(bodyParser.urlencoded({ extended: false }));
     this.app.use(bodyParser.json());
+    this.app.use(cors());
     this.app.use('/api', routes );
     
   }

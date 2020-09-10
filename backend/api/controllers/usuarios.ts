@@ -17,13 +17,15 @@ export const crearUsuario = (req: Request, res: Response)=>{
             console.log(err);
             return res.status(200).json({
                 estado: 'ERROR',
-                mensaje: 'Error al almacenar el usuario en la bd'
+                mensaje: 'Error al almacenar el usuario en la bd',
+                data: []
             });
         }
         res.status(200).json({
             estado: 'OK',
-            mensaje: 'Se creó el usuario correctamente'
-        }) 
+            mensaje: 'Se creó el usuario correctamente',
+            data: []
+        }); 
     });
     
 
