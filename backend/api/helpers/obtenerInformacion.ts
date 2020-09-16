@@ -1,7 +1,7 @@
 /**
- * version 0.1
+ * version 0.2
  * TODOS :
- * - ahora el backend si tira exepcion al obtener usuario o clave invalida , de timout tambien.
+ * - hacer mas consistente los valores, estados y condiciones de return
  * - verificar para caso de encuesta docente obligatoria
  */
 
@@ -15,6 +15,9 @@ interface userinfo {
   correo: String;
   movil: String;
 }
+//variable global para manejar un evento especifico
+//todo var
+let mensaje: String = "";
 /**
  * @params
  * @param rut: String - el rut del usuario sin puntos y con guion al que se le va a realizar el scrapping
@@ -40,12 +43,12 @@ export async function obtenerInformacion(rut: String, pass: String) {
 
     //registrar evento de dialogo
     page.on("dialog", async (dialog: any) => {
-      await console.log(dialog.message());
-      let mensaje: string = dialog.message();
+      mensaje = await dialog.message();
       await dialog.dismiss();
+      await browser.close();
     });
 
-    // navigate to a website
+    // navegar al website
     await page.goto("http://chitita.uta.cl/intranet/INT_control_acceso.php");
 
     //const frame = await elementHandle.contentFrame();
@@ -136,13 +139,24 @@ export async function obtenerInformacion(rut: String, pass: String) {
   } catch (error) {
     // catch un error
     //mostrar en consola para propositos de debug
-    console.log(error);
+    console.log(error.message);
     //retorna
+    if (
+      error.message ===
+      "Protocol error (Input.dispatchMouseEvent): Target closed."
+    ) {
+      return {
+        estado: "ERROR",
+        mensaje:
+          "Ocurrio un error al intentar obtener la informacion del usuario",
+        data: mensaje,
+      };
+    }
     return {
       estado: "ERROR",
       mensaje:
         "Ocurrio un error al intentar obtener la informacion del usuario",
-      data: error,
+      data: error.message,
     };
   }
 }
