@@ -1,7 +1,7 @@
 /**
  * version 0.1
  * TODOS :
- * - verificar casos de alertas en el browser cuando se ingresa mal el rut o clave no valida, ahora mismo solo hace timout el request desde el cliente
+ * - ahora el backend si tira exepcion al obtener usuario o clave invalida , de timout tambien.
  * - verificar para caso de encuesta docente obligatoria
  */
 
@@ -37,6 +37,13 @@ export async function obtenerInformacion(rut: String, pass: String) {
 
     // crear pagina en el browser
     const page = await browser.newPage();
+
+    //registrar evento de dialogo
+    page.on("dialog", async (dialog: any) => {
+      await console.log(dialog.message());
+      let mensaje: string = dialog.message();
+      await dialog.dismiss();
+    });
 
     // navigate to a website
     await page.goto("http://chitita.uta.cl/intranet/INT_control_acceso.php");
